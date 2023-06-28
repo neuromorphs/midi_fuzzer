@@ -2,10 +2,11 @@ import mido
 import fluidsynth
 import time
 import librosa as libr
+import key_mapper as kmp
 # Create a MIDI input port
 midi_in = mido.open_input()
 # Initialize the FluidSynth synthesizer
-fs = fluidsynth.Synth(gain=.5,samplerate=44100.0)
+fs = fluidsynth.Synth(gain=1.0,samplerate=44100.0)
 
 fs.start()
 # Load a SoundFont file for the synthesizer
@@ -15,17 +16,20 @@ sfid = fs.sfload(soundfont_file)
 fs.program_select(0, sfid, 0, 0)
 
 # Define the note mapping
-note_mapping = {
-    'G4': 'A4',  # Map G4 to A4
-    'C4':'D4'
-}
-note_mapping_midi = {}
-for key, value in note_mapping.items():
-    print(key,value)
-    midi_key = libr.note_to_midi(key)
-    midi_value = libr.note_to_midi(value)
-    note_mapping_midi[midi_key] = midi_value
-    
+
+note_mapper = kmp.key_mapper('random')
+note_mapping = note_mapper.kmap
+note_mapping_midi = note_mapper.mmap
+# note_mapping = {
+#     'G4': 'A6',  # Map G4 to A4
+#     'C4':'D6'
+# }
+# note_mapping_midi = {}
+# for key, value in note_mapping.items():
+#     print(key,value)
+#     midi_key = libr.note_to_midi(key)
+#     midi_value = libr.note_to_midi(value)
+#     note_mapping_midi[midi_key] = midi_value
 print(note_mapping_midi)
 # Process incoming MIDI messages
 for msg in midi_in:
