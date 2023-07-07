@@ -167,7 +167,7 @@ class key_mapper():
                 self._generate_map_from_mode(self.mode)
             elif self.counter -1 in self.kmap_config.change_timing:
                 self._remap_keys(self.standard_map)
-        elif self.mode == 'delay_ramp' or self.mode == 'velocity_ramp':
+        elif self.mode == 'delay_ramp' or self.mode == 'velocity_ramp' or self.mode == 'standard':
             pass
         else:
             if self.counter>self.change and self.counter is not None:
@@ -176,7 +176,7 @@ class key_mapper():
                 if self.currently_random:
                     self.change = self.kmap_config.random_length
                 else:
-                    self.change = random.randint(0,self.kmap_config.periodicity)
+                    self.change = random.randint(20,self.kmap_config.periodicity)
                 self._generate_map_from_mode(self.mode)
             else:
                 pass
@@ -190,8 +190,8 @@ class key_mapper():
         """
         
         #standard keyboard
-        if mode == 'none':
-            self._remap_keys(self.kmap)
+        if mode == 'standard':
+            self._remap_keys(self.standard_map)
 
         #statically remaps a set of keys for the entire experiment
         if mode == 'static':
@@ -215,10 +215,11 @@ class key_mapper():
         #Random Zone shift - transposes a continuous section of keys
         if mode == 'SRZ':
             if self.currently_random:
-                self._remap_keys(self.standard_map)
-            else:
                 shift_keymap, shift_map = self._shift_remap_zone()
                 self._remap_keys(shift_map)
+            else:
+                self._remap_keys(self.standard_map)
+
 
         if mode == 'schedule':
             if self.currently_random:

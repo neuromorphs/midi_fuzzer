@@ -8,6 +8,11 @@ class static_multi_remap:
     periodicity: int = 30
     random_length: int = 2
 
+class standard:
+    kmap: Dict[str,str]= field(default_factory=lambda:({'A4':'A4', 'G4':'G4', 'C4':'C4'}))
+    periodicity: int = 99999999999
+    random_length: int = 0
+
 # @dataclass
 # class schedule:
 #     kmap: Dict[str,str]= field(default_factory=lambda:({'A4':'B4', 'G4':'A5', 'C4':'D5'}))
@@ -23,10 +28,10 @@ class random_zone_remap:
 
 @dataclass
 class random_zone_shift:
-    kmap: Dict[str,str] = field(default_factory=lambda: {'C4':'C6'})
+    kmap: Dict[str,str] = field(default_factory=lambda: {'C1':'C8'})
     periodicity: int = 30
     shift_max : int = 3
-    random_length: int = 2
+    random_length: int = 1
 
 @dataclass
 class delay_ramp:
@@ -38,7 +43,7 @@ class delay_ramp:
 
 @dataclass
 class velocity_ramp:
-    start_vel: int = 1 
+    start_vel: int = 30 
     start_attn: int = 3
     rate: float = .05
     shift_max : int = 6

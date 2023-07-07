@@ -43,7 +43,7 @@ def process_midi_messages(midi_in, nm, fs):
     midi_input_name = mido.get_input_names()[0]  # Select the correct one if there are multiple
 
     # Create an LSL Stream for MIDI events
-    info = StreamInfo('MIDIStream', 'MIDI', 3, 100, 'int32', 'timsterriblekeyborb')
+    info = StreamInfo('MIDIStream', 'MIDI', 3, 0, 'int32', 'timsterriblekeyborb')
     outlet = StreamOutlet(info)
 
     # Define MIDI input callback
@@ -122,6 +122,8 @@ def main(args):
         kmap_config = key_configs.delay_ramp()
     elif parsed_args.mode[0] == 'velocity_ramp':
         kmap_config = key_configs.velocity_ramp()
+    elif parsed_args.mode[0] == 'standard':
+        kmap_config = key_configs.standard()
     else:
         kmap_config = None
 
