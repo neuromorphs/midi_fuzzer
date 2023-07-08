@@ -43,18 +43,30 @@ def process_midi_messages(midi_in, nm, fs):
     midi_input_name = mido.get_input_names()[0]  # Select the correct one if there are multiple
 
     # Create an LSL Stream for MIDI events
-    info = StreamInfo('MIDIStream', 'MIDI', 3, 0, 'int32', 'timsterriblekeyborb')
+    info = StreamInfo('MIDIStream', 'MIDI', 6, 0, 'int32', 'timsterriblekeyborb')
     outlet = StreamOutlet(info)
 
     # Define MIDI input callback
     def on_midi(msg):
         # MIDI messages have three primary attributes: type, note, and velocity
-        data = [0, msg.note, msg.velocity]
+        if msg.type =='note_on':
+            note_on = 1
+        else:
+            note_on = 0
+
+        if msg.note != nm.mmap[msg.note]:
+            event = 1
+        else:
+            event = 0
+
+        data = [event, note_on, msg.note, nm.mmap[msg.note], msg.velocity,int(msg.velocity/vel_attn)]
+        print(data)
         outlet.push_sample(data)
 
     # Open MIDI input and attach callback
     inport = mido.open_input(midi_input_name)
     inport.callback = on_midi
+    vel_attn = 1
 
     # Your main loop here. MIDI events will automatically trigger the on_midi callback.
     delay=0
